@@ -10,37 +10,48 @@ import java.lang.reflect.Array;
 public class Queue<T> {
     private T list[];
     private int assumedSize;
-    private static int fromEnd;
-    private static int toRemoveLast;
+    private static int firstElement = 0;
+    private static int lastElement = 0;
 
-    public Queue(Class<T> clazz, int assumedSize) {
-        this.assumedSize = assumedSize;
-        fromEnd = assumedSize - 1;
-        toRemoveLast = assumedSize - 1;
-        final T[] list = (T[]) Array.newInstance(clazz, assumedSize);
-        this.list = list;
+    public Queue(Class<T> clazz, int size) {
+        this.assumedSize = size;
+
+        @SuppressWarnings("unchecked")
+        final T[] aList = (T[]) Array.newInstance(clazz, assumedSize);
+        this.list = aList;
     }
 
     public void add(T element) {
-        list[fromEnd] = element;
-        fromEnd -= 1;
+        list[lastElement] = element;
+        lastElement += 1;
     }
 
     public void removeFirst() {
-        list[toRemoveLast] = null;
-        toRemoveLast -= 1;
+        list[firstElement] = null;
+        firstElement += 1;
     }
 
     public void removeLast() {
-        list[fromEnd + 1] = null;
-        fromEnd += 1;
+        list[lastElement - 1] = null;
+        lastElement -= 1;
+    }
+
+    public void printQueue() {
+        for (int i = 0; i < assumedSize; i++) {
+            if (list[i] == null) System.out.print(" ");
+            else System.out.print(list[i]);
+
+            System.out.print(" ");
+        }
+
+        System.out.println();
     }
 
     public T getFirst() {
-        return list[toRemoveLast];
+        return list[firstElement];
     }
 
-    public T getLast() {
-        return list[fromEnd];
-    }
+    public T getLast() { return list[lastElement - 1]; }
+
+    public int getLastElement() { return lastElement; }
 }
